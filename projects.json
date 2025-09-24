@@ -1,0 +1,58 @@
+[
+  {
+    "id": "pulse-incident-ios",
+    "title": "Pulse Incident iOS",
+    "description": "Real-time incident management app for iOS with ARKit integration",
+    "tech": ["SwiftUI", "ARKit", "Core Data", "CloudKit"],
+    "metrics": {
+      "downloads": "10K+",
+      "rating": "4.8",
+      "size": "45MB"
+    },
+    "screenshots": [
+      "https://your-cdn-endpoint.com/pulse/screenshot1.webp",
+      "https://your-cdn-endpoint.com/pulse/screenshot2.webp",
+      "https://your-cdn-endpoint.com/pulse/screenshot3.webp"
+    ],
+    "demoVideo": "https://your-cdn-endpoint.com/pulse/demo.mp4",
+    "github": "https://github.com/yourusername/pulse-incident-ios",
+    "appStore": "https://apps.apple.com/app/pulse-incident/id123456789"
+  },
+  {
+    "id": "weather-pro",
+    "title": "Weather Pro",
+    "description": "Advanced weather forecasting app with beautiful animations",
+    "tech": ["SwiftUI", "Combine", "Core Location", "WeatherKit"],
+    "metrics": {
+      "downloads": "5K+",
+      "rating": "4.6",
+      "size": "32MB"
+    },
+    "screenshots": [
+      "https://your-cdn-endpoint.com/weather/screenshot1.webp",
+      "https://your-cdn-endpoint.com/weather/screenshot2.webp"
+    ],
+    "demoVideo": "https://your-cdn-endpoint.com/weather/demo.mp4",
+    "github": "https://github.com/yourusername/weather-pro",
+    "appStore": "https://apps.apple.com/app/weather-pro/id987654321"
+  },
+  {
+    "id": "task-manager",
+    "title": "Task Manager Pro",
+    "description": "Productivity app with advanced task management and team collaboration",
+    "tech": ["SwiftUI", "Core Data", "CloudKit", "WidgetKit"],
+    "metrics": {
+      "downloads": "15K+",
+      "rating": "4.9",
+      "size": "28MB"
+    },
+    "screenshots": [
+      "https://your-cdn-endpoint.com/task/screenshot1.webp",
+      "https://your-cdn-endpoint.com/task/screenshot2.webp",
+      "https://your-cdn-endpoint.com/task/screenshot3.webp"
+    ],
+    "demoVideo": "https://your-cdn-endpoint.com/task/demo.mp4",
+    "github": "https://github.com/yourusername/task-manager",
+    "appStore": "https://apps.apple.com/app/task-manager-pro/id456789123"
+  }
+]
