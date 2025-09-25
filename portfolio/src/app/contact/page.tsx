@@ -106,7 +106,7 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="text-xl font-bold text-slate-900 dark:text-white">
-              ExtMac
+              Shashank Bejjanki
             </Link>
             <div className="flex items-center space-x-6">
               <Link href="/projects" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
@@ -351,21 +351,21 @@ export default function ContactPage() {
                     <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
                       📧
                     </div>
-                    <span className="text-slate-700 dark:text-slate-300">extmac@example.com</span>
+                    <span className="text-slate-700 dark:text-slate-300">shashank.bejjanki@example.com</span>
                   </div>
                   
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
                       💼
                     </div>
-                    <span className="text-slate-700 dark:text-slate-300">linkedin.com/in/extmac</span>
+                    <span className="text-slate-700 dark:text-slate-300">linkedin.com/in/shashank-dev2</span>
                   </div>
                   
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
                       🐙
                     </div>
-                    <span className="text-slate-700 dark:text-slate-300">github.com/extmac</span>
+                    <span className="text-slate-700 dark:text-slate-300">github.com/shashank-dev2</span>
                   </div>
                 </div>
               </motion.div>

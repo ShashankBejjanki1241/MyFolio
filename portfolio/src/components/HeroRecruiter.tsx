@@ -31,7 +31,7 @@ export default function HeroRecruiter() {
               className="text-6xl md:text-8xl font-bold leading-tight"
             >
               <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                ExtMac
+                Shashank Bejjanki
               </span>
             </motion.h1>
             

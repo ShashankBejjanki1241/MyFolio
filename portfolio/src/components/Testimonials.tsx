@@ -18,7 +18,7 @@ const testimonials: Testimonial[] = [
     name: 'Sarah Chen',
     role: 'Product Manager',
     company: 'TechCorp',
-    content: 'ExtMac delivered an exceptional iOS app that exceeded our expectations. The attention to detail and performance optimization was outstanding.',
+    content: 'Shashank delivered an exceptional iOS app that exceeded our expectations. The attention to detail and performance optimization was outstanding.',
     rating: 5,
     avatar: '👩‍💼'
   },
@@ -27,7 +27,7 @@ const testimonials: Testimonial[] = [
     name: 'Michael Rodriguez',
     role: 'CTO',
     company: 'StartupXYZ',
-    content: 'Working with ExtMac was a game-changer for our mobile strategy. The SwiftUI implementation was flawless and the user experience is incredible.',
+    content: 'Working with Shashank was a game-changer for our mobile strategy. The SwiftUI implementation was flawless and the user experience is incredible.',
     rating: 5,
     avatar: '👨‍💻'
   },
@@ -36,7 +36,7 @@ const testimonials: Testimonial[] = [
     name: 'Emily Johnson',
     role: 'Design Director',
     company: 'CreativeStudio',
-    content: 'ExtMac\'s understanding of iOS design patterns and ARKit integration brought our vision to life. The app looks and feels premium.',
+    content: 'Shashank\'s understanding of iOS design patterns and ARKit integration brought our vision to life. The app looks and feels premium.',
     rating: 5,
     avatar: '👩‍🎨'
   },
@@ -45,7 +45,7 @@ const testimonials: Testimonial[] = [
     name: 'David Kim',
     role: 'Founder',
     company: 'InnovateLab',
-    content: 'The Core Data implementation and CloudKit sync ExtMac built for our app is rock-solid. Zero data loss and seamless user experience.',
+    content: 'The Core Data implementation and CloudKit sync Shashank built for our app is rock-solid. Zero data loss and seamless user experience.',
     rating: 5,
     avatar: '👨‍🚀'
   }
@@ -66,7 +66,7 @@ export default function Testimonials() {
             What Clients Say
           </h2>
           <p className="text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto">
-            Don&apos;t just take my word for it. Here&apos;s what industry professionals say about working with ExtMac.
+            Don&apos;t just take my word for it. Here&apos;s what industry professionals say about working with Shashank.
           </p>
         </motion.div>
 

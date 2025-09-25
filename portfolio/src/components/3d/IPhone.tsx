@@ -1,10 +1,9 @@
 'use client'
 
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, Html } from '@react-three/drei'
 import { useMemo, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useDebug, performanceMonitor } from '@/utils/debug'
 
 interface IPhoneProps {
   onClick?: () => void
@@ -12,14 +11,10 @@ interface IPhoneProps {
 
 export default function IPhone({ onClick }: IPhoneProps) {
   const meshRef = useRef<THREE.Group>(null)
-  const [debugMode, setDebugMode] = useState(false)
   const [hovered, setHovered] = useState(false)
-  const debug = useDebug('IPhone')
   
   // For now, we'll create a more detailed iPhone-like shape since we don't have a GLB model
   // In production, you would load: useGLTF(process.env.NEXT_PUBLIC_ASSETS_BASE + '/models/iphone14.glb')
-  
-  debug.logMount()
   
   const geometry = useMemo(() => {
     const phoneGeometry = new THREE.BoxGeometry(0.4, 0.8, 0.05)
@@ -66,22 +61,8 @@ export default function IPhone({ onClick }: IPhoneProps) {
 
   // Add subtle rotation animation
   useFrame((state) => {
-    performanceMonitor.startTimer('iPhone-animation')
-    
     if (meshRef.current) {
       meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1
-      
-      if (debugMode) {
-        debug.debug('Animation frame', {
-          elapsedTime: state.clock.elapsedTime,
-          rotation: meshRef.current.rotation.y
-        })
-      }
-    }
-    
-    const renderTime = performanceMonitor.endTimer('iPhone-animation')
-    if (debugMode && renderTime > 16.67) {
-      debug.warn('Slow animation frame', `${renderTime.toFixed(2)}ms`)
     }
   })
 
@@ -96,6 +77,19 @@ export default function IPhone({ onClick }: IPhoneProps) {
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       />
+      
+      {/* Interactive Hover Effect */}
+      {hovered && (
+        <Html position={[0, 0.8, 0]} center>
+          <div className="bg-black/80 backdrop-blur-sm rounded-lg p-3 border border-white/30 text-white text-sm">
+            <div className="text-center">
+              <div className="text-lg mb-1">📱</div>
+              <div className="font-semibold">iOS Developer</div>
+              <div className="text-xs text-blue-300">Click to explore portfolio</div>
+            </div>
+          </div>
+        </Html>
+      )}
       
       {/* Screen */}
       <mesh 
@@ -136,28 +130,6 @@ export default function IPhone({ onClick }: IPhoneProps) {
         material={materials.phoneMaterial}
         position={[0.21, -0.1, 0]}
       />
-      
-      {/* Debug Controls */}
-      {debugMode && (
-        <mesh 
-          onClick={() => {
-            setDebugMode(false)
-            debug.info('Debug mode disabled')
-          }}
-          position={[0, -0.5, 0]}
-        >
-          <boxGeometry args={[0.1, 0.1, 0.1]} />
-          <meshBasicMaterial color="red" />
-        </mesh>
-      )}
-      
-      {/* Debug Info Display */}
-      {debugMode && (
-        <mesh position={[0, 0.5, 0]}>
-          <planeGeometry args={[0.3, 0.2]} />
-          <meshBasicMaterial color="black" transparent opacity={0.7} />
-        </mesh>
-      )}
     </group>
   )
 }

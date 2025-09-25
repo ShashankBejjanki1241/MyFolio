@@ -41,7 +41,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="text-xl font-bold text-slate-900 dark:text-white">
-              ExtMac
+              Shashank Bejjanki
             </Link>
             <div className="flex items-center space-x-6">
               <Link href="/projects" className="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
@@ -107,7 +107,7 @@ export default function Home() {
       <footer className="bg-slate-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-slate-400">
-            © 2024 ExtMac. Built with Next.js, React Three Fiber, and Tailwind CSS.
+            © 2024 Shashank Bejjanki. Built with Next.js, React Three Fiber, and Tailwind CSS.
           </p>
         </div>
       </footer>

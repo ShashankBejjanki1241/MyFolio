@@ -63,12 +63,12 @@ export default function Hero3D() {
                   Interactive Portfolio Experience
                 </div>
                 
-                <h1 className="text-7xl md:text-9xl font-bold leading-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  ExtMac
-                </h1>
-                <h2 className="text-4xl md:text-6xl font-bold text-white/90">
-                  iOS Development Universe
-                </h2>
+                       <h1 className="text-7xl md:text-9xl font-bold leading-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                         Shashank Bejjanki
+                       </h1>
+                       <h2 className="text-4xl md:text-6xl font-bold text-white/90">
+                         iOS Development Universe
+                       </h2>
               </div>
               
               <div className="max-w-4xl mx-auto space-y-6">

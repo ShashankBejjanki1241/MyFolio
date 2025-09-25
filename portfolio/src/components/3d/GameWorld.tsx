@@ -139,13 +139,13 @@ export default function GameWorld({ onProjectSelect }: GameWorldProps) {
       {/* Central iPhone */}
       <IPhone />
       
-      {/* Professional Data Visualization Hub */}
-      <Html position={[0, 3, 0]} center>
-        <div className="bg-black/90 backdrop-blur-xl rounded-2xl p-6 border border-white/20 min-w-[400px]">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold text-white mb-2">Portfolio Analytics</h2>
-            <p className="text-blue-200 text-sm">Real-time performance metrics</p>
-          </div>
+             {/* Professional Data Visualization Hub */}
+             <Html position={[0, 3, 0]} center>
+               <div className="bg-black/90 backdrop-blur-xl rounded-2xl p-6 border border-white/20 min-w-[400px]">
+                 <div className="text-center mb-6">
+                   <h2 className="text-2xl font-bold text-white mb-2">Shashank&apos;s Portfolio Analytics</h2>
+                   <p className="text-blue-200 text-sm">Real-time performance metrics & achievements</p>
+                 </div>
           
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-gradient-to-br from-blue-600/30 to-purple-600/30 rounded-xl p-4 border border-blue-400/30">

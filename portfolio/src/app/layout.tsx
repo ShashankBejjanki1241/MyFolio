@@ -7,11 +7,11 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ExtMac — iOS Developer",
+  title: "Shashank Bejjanki — iOS Developer",
   description: "SwiftUI • ARKit • Core Data • High-performance iOS apps",
   openGraph: {
     type: 'website',
-    siteName: 'ExtMac — iOS Developer',
+    siteName: 'Shashank Bejjanki — iOS Developer',
   }
 };
 
