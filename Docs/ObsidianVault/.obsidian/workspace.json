@@ -1,0 +1,193 @@
+{
+  "main": {
+    "id": "852132a7283f7132",
+    "type": "split",
+    "children": [
+      {
+        "id": "20e00b79b28e23cc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2cf5817d5116d2aa",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "07_Checklists.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "07_Checklists"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "c5eab16e7f91cfe4",
+    "type": "split",
+    "children": [
+      {
+        "id": "2ddbca935928ac28",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7cf4223647b739c8",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "bf6b382cd9d47b34",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "ba70bdc538823939",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "c7f69a0952cca84f",
+    "type": "split",
+    "children": [
+      {
+        "id": "e753ae6094dc6c8f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b584dec357c9a850",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "07_Checklists.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for 07_Checklists"
+            }
+          },
+          {
+            "id": "e0f8b847403b46a3",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "07_Checklists.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from 07_Checklists"
+            }
+          },
+          {
+            "id": "96ff066f34b0a60f",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "d7ff2dd1d24765ba",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "07_Checklists.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of 07_Checklists"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "2cf5817d5116d2aa",
+  "lastOpenFiles": [
+    "11_Component_Docs.md",
+    "10_Daily_Notes.md",
+    "09_File_Index.md",
+    "Projects/README.md",
+    "Projects/Task Manager Pro.md",
+    "Projects/Weather Pro.md",
+    "Projects/Pulse Incident iOS.md",
+    "Projects",
+    "06_Deployment.md",
+    "07_Checklists.md",
+    "08_Troubleshooting.md",
+    "README.md",
+    "02_Structure.md",
+    "00_Overview.md",
+    "05_Contact.md",
+    "04_3D.md",
+    "03_Content_Guidelines.md",
+    "01_Setup.md"
+  ]
+}
