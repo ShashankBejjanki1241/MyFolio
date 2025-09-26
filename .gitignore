@@ -37,3 +37,13 @@ next-env.d.ts
 
 # local documentation (keep locally only)
 Docs/
+# Documentation files (personal notes)
+portfolio/*.md
+portfolio/STATUS.md
+portfolio/DEPLOYMENT.md
+portfolio/3D_*.md
+portfolio/SCROLL_*.md
+portfolio/DUAL_*.md
+portfolio/CAREER_*.md
+portfolio/ADVANCED_*.md
+portfolio/POSTPROCESSING_*.md
