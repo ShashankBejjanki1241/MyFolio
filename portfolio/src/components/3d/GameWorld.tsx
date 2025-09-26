@@ -1,11 +1,11 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Text, Html, Sphere, Box, Cylinder } from '@react-three/drei'
+import { Text, Html, Sphere, Box, Cylinder, Torus, Octahedron, Stars, Float, Sparkles, Effects, Plane, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import IPhone from './IPhone'
-import { useDebug, performanceMonitor } from '@/utils/debug'
+import { useDebug } from '@/utils/debug'
 
 interface GameWorldProps {
   onProjectSelect: (projectId: string) => void
@@ -26,8 +26,197 @@ interface ProjectData {
   achievements: string[]
   position: [number, number, number]
   color: string
+  techColors: string[]
 }
 
+// Floating Code Symbol Component
+function CodeSymbol({ position, symbol, color, delay = 0 }: { position: [number, number, number], symbol: string, color: string, delay?: number }) {
+  const meshRef = useRef<THREE.Group>(null)
+  
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.8 + delay) * 0.15
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.2 + delay
+    }
+  })
+
+  return (
+    <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.2}>
+      <group ref={meshRef} position={position}>
+        <Box args={[0.15, 0.15, 0.05]}>
+          <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.2} />
+        </Box>
+        <Text
+          position={[0, 0, 0.03]}
+          fontSize={0.08}
+          color="white"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/inter-bold.woff"
+        >
+          {symbol}
+        </Text>
+      </group>
+    </Float>
+  )
+}
+
+// Development Station Component
+function DevStation({ position, title, tech, color, onSelect }: { 
+  position: [number, number, number], 
+  title: string, 
+  tech: string[], 
+  color: string, 
+  onSelect: () => void 
+}) {
+  const meshRef = useRef<THREE.Group>(null)
+  const [hovered, setHovered] = useState(false)
+  
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1
+      if (hovered) {
+        meshRef.current.scale.setScalar(1.1)
+      } else {
+        meshRef.current.scale.setScalar(1)
+      }
+    }
+  })
+
+  return (
+    <group ref={meshRef} position={position}>
+      {/* Desk */}
+      <Box args={[2, 0.1, 1]} position={[0, -0.5, 0]}>
+        <meshStandardMaterial color="#2a2a2a" />
+      </Box>
+      
+      {/* Monitor */}
+      <Box args={[0.8, 0.6, 0.1]} position={[0, 0.2, 0]}>
+        <meshStandardMaterial color="#1a1a1a" />
+      </Box>
+      
+      {/* Screen */}
+      <Box args={[0.7, 0.5, 0.02]} position={[0, 0.2, 0.06]}>
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} />
+      </Box>
+      
+      {/* Keyboard */}
+      <Box args={[0.6, 0.05, 0.2]} position={[0, -0.3, 0.3]}>
+        <meshStandardMaterial color="#333" />
+      </Box>
+      
+      {/* Tech Orbs around the station */}
+      {tech.map((techItem, index) => {
+        const angle = (index / tech.length) * Math.PI * 2
+        const radius = 1.5
+        const x = Math.cos(angle) * radius
+        const z = Math.sin(angle) * radius
+        
+        return (
+          <CodeSymbol
+            key={techItem}
+            position={[x, 0.5, z]}
+            symbol={techItem.charAt(0)}
+            color={color}
+            delay={index * 0.5}
+          />
+        )
+      })}
+      
+      {/* Project Title */}
+      <Text
+        position={[0, 1.2, 0]}
+        fontSize={0.2}
+        color="white"
+        anchorX="center"
+        anchorY="middle"
+        font="/fonts/inter-bold.woff"
+      >
+        {title}
+      </Text>
+      
+      {/* Clickable area */}
+      <Box 
+        args={[3, 2, 3]} 
+        position={[0, 0, 0]}
+        onClick={onSelect}
+        onPointerOver={() => setHovered(true)}
+        onPointerOut={() => setHovered(false)}
+      >
+        <meshBasicMaterial transparent opacity={0} />
+      </Box>
+      
+      {hovered && (
+        <Html position={[0, 1.8, 0]} center>
+          <div className="bg-black/80 text-white px-3 py-2 rounded-lg text-sm">
+            Click to explore {title}
+          </div>
+        </Html>
+      )}
+    </group>
+  )
+}
+
+// Floating iPhone Display
+function FloatingIPhone({ position }: { position: [number, number, number] }) {
+  return (
+    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.3}>
+      <group position={position}>
+        <IPhone scale={[0.8, 0.8, 0.8]} />
+        <Text
+          position={[0, -1.5, 0]}
+          fontSize={0.15}
+          color="#3b82f6"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/inter-bold.woff"
+        >
+          Interactive Portfolio
+        </Text>
+      </group>
+    </Float>
+  )
+}
+
+// Achievement Trophy
+function AchievementTrophy({ position, achievement, color }: { position: [number, number, number], achievement: string, color: string }) {
+  const meshRef = useRef<THREE.Group>(null)
+  
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.5
+      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 1.2) * 0.1
+    }
+  })
+
+  return (
+    <group ref={meshRef} position={position}>
+      {/* Trophy base */}
+      <Cylinder args={[0.1, 0.1, 0.3]} position={[0, 0, 0]}>
+        <meshStandardMaterial color={color} />
+      </Cylinder>
+      
+      {/* Trophy top */}
+      <Sphere args={[0.15]} position={[0, 0.25, 0]}>
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.2} />
+      </Sphere>
+      
+      {/* Achievement text */}
+      <Text
+        position={[0, -0.8, 0]}
+        fontSize={0.08}
+        color="white"
+        anchorX="center"
+        anchorY="middle"
+        font="/fonts/inter-regular.woff"
+      >
+        {achievement}
+      </Text>
+    </group>
+  )
+}
+
+// Main GameWorld Component
 export default function GameWorld({ onProjectSelect }: GameWorldProps) {
   const groupRef = useRef<THREE.Group>(null)
   const [hovered, setHovered] = useState<string | null>(null)
@@ -38,33 +227,13 @@ export default function GameWorld({ onProjectSelect }: GameWorldProps) {
 
   debug.logMount()
 
-  // Animate the world
-  useFrame((state) => {
-    performanceMonitor.startTimer('GameWorld-animation')
-    
-    if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.1) * 0.1
-      
-      if (debugMode) {
-        debug.debug('World animation', {
-          elapsedTime: state.clock.elapsedTime,
-          rotation: groupRef.current.rotation.y,
-          hoveredProject: hovered
-        })
-      }
-    }
-    
-    const renderTime = performanceMonitor.endTimer('GameWorld-animation')
-    if (debugMode && renderTime > 16.67) {
-      debug.warn('Slow world animation', `${renderTime.toFixed(2)}ms`)
-    }
-  })
-
+  // Enhanced project data with proper spacing for a developer studio layout
   const projects: ProjectData[] = [
-    { 
-      id: 'pulse-incident-ios', 
-      position: [-4, 0, 0] as [number, number, number], 
-      color: '#3b82f6',
+    {
+      id: 'pulse-incident-ios',
+      position: [-6, 0, -2] as [number, number, number],
+      color: '#ef4444',
+      techColors: ['#dc2626', '#f97316', '#eab308', '#22c55e', '#3b82f6'],
       title: 'Pulse Incident',
       description: 'Enterprise-grade incident management platform with AR visualization',
       tech: ['SwiftUI', 'ARKit', 'Core Data', 'CloudKit', 'Combine'],
@@ -77,15 +246,16 @@ export default function GameWorld({ onProjectSelect }: GameWorldProps) {
       },
       achievements: [
         'Featured in App Store',
-        'Enterprise client adoption',
-        'Zero critical bugs in production',
-        '99.9% uptime SLA'
+        'Enterprise Adoption',
+        'Zero Critical Bugs',
+        '99.9% Uptime SLA'
       ]
     },
-    { 
-      id: 'weather-pro', 
-      position: [0, 0, 0] as [number, number, number], 
+    {
+      id: 'weather-pro',
+      position: [6, 0, -2] as [number, number, number],
       color: '#10b981',
+      techColors: ['#059669', '#0891b2', '#7c3aed', '#dc2626', '#f59e0b'],
       title: 'Weather Pro',
       description: 'AI-powered weather forecasting with hyperlocal predictions',
       tech: ['SwiftUI', 'Combine', 'WeatherKit', 'Core ML', 'WidgetKit'],
@@ -98,387 +268,182 @@ export default function GameWorld({ onProjectSelect }: GameWorldProps) {
       },
       achievements: [
         'App Store Editor\'s Choice',
-        '95% accuracy rate',
-        'Sub-1s load times',
-        'Offline functionality'
+        'AI-Powered Predictions',
+        'Hyperlocal Accuracy',
+        'Beautiful Animations'
       ]
     },
-    { 
-      id: 'task-manager', 
-      position: [4, 0, 0] as [number, number, number], 
-      color: '#f59e0b',
+    {
+      id: 'task-manager',
+      position: [0, 0, 6] as [number, number, number],
+      color: '#8b5cf6',
+      techColors: ['#7c3aed', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'],
       title: 'Task Manager Pro',
-      description: 'Advanced productivity suite with team collaboration & analytics',
-      tech: ['SwiftUI', 'Core Data', 'CloudKit', 'WidgetKit', 'StoreKit'],
+      description: 'Productivity powerhouse with team collaboration features',
+      tech: ['SwiftUI', 'Core Data', 'CloudKit', 'WidgetKit', 'SiriKit'],
       metrics: {
-        downloads: '12K+',
-        rating: 4.7,
+        downloads: '20K+',
+        rating: 4.9,
         size: '28MB',
         revenue: '$35K+',
         users: '3.2K+'
       },
       achievements: [
-        'Team collaboration features',
-        'Advanced analytics dashboard',
-        'Cross-platform sync',
-        'Enterprise security compliance'
+        'Productivity Champion',
+        'Team Collaboration',
+        'Siri Integration',
+        'Widget Support'
       ]
     }
   ]
 
-  // Professional metrics visualization
-  const totalMetrics = {
-    downloads: projects.reduce((sum, p) => sum + parseInt(p.metrics.downloads.replace('K+', '')), 0),
-    avgRating: projects.reduce((sum, p) => sum + p.metrics.rating, 0) / projects.length,
-    totalRevenue: projects.reduce((sum, p) => sum + parseInt(p.metrics.revenue?.replace('$', '').replace('K+', '') || '0'), 0),
-    totalUsers: projects.reduce((sum, p) => sum + parseInt(p.metrics.users?.replace('K+', '') || '0'), 0)
+  // Studio floor
+  const floorSize = 20
+  const gridSize = 1
+
+  // Create grid lines for the studio floor
+  const gridLines = useMemo(() => {
+    const lines = []
+    for (let i = -floorSize; i <= floorSize; i += gridSize) {
+      lines.push(
+        <line key={`x-${i}`}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              count={2}
+              array={new Float32Array([i, 0, -floorSize, i, 0, floorSize])}
+              itemSize={3}
+            />
+          </bufferGeometry>
+          <lineBasicMaterial color="#333333" transparent opacity={0.3} />
+        </line>
+      )
+      lines.push(
+        <line key={`z-${i}`}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              count={2}
+              array={new Float32Array([-floorSize, 0, i, floorSize, 0, i])}
+              itemSize={3}
+            />
+          </bufferGeometry>
+          <lineBasicMaterial color="#333333" transparent opacity={0.3} />
+        </line>
+      )
+    }
+    return lines
+  }, [])
+
+  const handleProjectSelect = (projectId: string) => {
+    setSelectedProject(projectId)
+    onProjectSelect(projectId)
   }
 
   return (
     <group ref={groupRef}>
-      {/* Central iPhone */}
-      <IPhone />
+      {/* Studio Environment */}
+      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
       
-             {/* Professional Data Visualization Hub */}
-             <Html position={[0, 3, 0]} center>
-               <div className="bg-black/90 backdrop-blur-xl rounded-2xl p-6 border border-white/20 min-w-[400px]">
-                 <div className="text-center mb-6">
-                   <h2 className="text-2xl font-bold text-white mb-2">Shashank&apos;s Portfolio Analytics</h2>
-                   <p className="text-blue-200 text-sm">Real-time performance metrics & achievements</p>
-                 </div>
-          
-          <div className="grid grid-cols-2 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-blue-600/30 to-purple-600/30 rounded-xl p-4 border border-blue-400/30">
-              <div className="text-2xl font-bold text-blue-300">{totalMetrics.downloads}K+</div>
-              <div className="text-blue-200 text-sm">Total Downloads</div>
-            </div>
-            <div className="bg-gradient-to-br from-green-600/30 to-emerald-600/30 rounded-xl p-4 border border-green-400/30">
-              <div className="text-2xl font-bold text-green-300">{totalMetrics.avgRating.toFixed(1)}</div>
-              <div className="text-green-200 text-sm">Average Rating</div>
-            </div>
-            <div className="bg-gradient-to-br from-yellow-600/30 to-orange-600/30 rounded-xl p-4 border border-yellow-400/30">
-              <div className="text-2xl font-bold text-yellow-300">${totalMetrics.totalRevenue}K+</div>
-              <div className="text-yellow-200 text-sm">Total Revenue</div>
-            </div>
-            <div className="bg-gradient-to-br from-pink-600/30 to-rose-600/30 rounded-xl p-4 border border-pink-400/30">
-              <div className="text-2xl font-bold text-pink-300">{totalMetrics.totalUsers}K+</div>
-              <div className="text-pink-200 text-sm">Active Users</div>
-            </div>
-          </div>
-          
-          <div className="text-center">
-            <button 
-              onClick={() => setShowMetrics(!showMetrics)}
-              className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors text-sm"
-            >
-              {showMetrics ? 'Hide' : 'Show'} Detailed Metrics
-            </button>
-          </div>
-        </div>
-      </Html>
-
-      {/* Enhanced Project Orbs with Professional Data */}
+      {/* Studio Floor with Grid */}
+      <Plane args={[floorSize * 2, floorSize * 2]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
+        <meshStandardMaterial color="#1a1a1a" transparent opacity={0.8} />
+      </Plane>
+      
+      {/* Grid Lines */}
+      <group>{gridLines}</group>
+      
+      {/* Studio Walls (invisible boundaries) */}
+      <Box args={[0.1, 8, floorSize * 2]} position={[-floorSize, 4, 0]}>
+        <meshBasicMaterial transparent opacity={0.1} color="#333" />
+      </Box>
+      <Box args={[0.1, 8, floorSize * 2]} position={[floorSize, 4, 0]}>
+        <meshBasicMaterial transparent opacity={0.1} color="#333" />
+      </Box>
+      <Box args={[floorSize * 2, 8, 0.1]} position={[0, 4, -floorSize]}>
+        <meshBasicMaterial transparent opacity={0.1} color="#333" />
+      </Box>
+      <Box args={[floorSize * 2, 8, 0.1]} position={[0, 4, floorSize]}>
+        <meshBasicMaterial transparent opacity={0.1} color="#333" />
+      </Box>
+      
+      {/* Central Welcome Area */}
+      <group position={[0, 0, 0]}>
+        <FloatingIPhone position={[0, 2, 0]} />
+        
+        {/* Welcome Text */}
+        <Text
+          position={[0, 4, 0]}
+          fontSize={0.3}
+          color="#3b82f6"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/inter-bold.woff"
+        >
+          Welcome to My Development Studio
+        </Text>
+        
+        <Text
+          position={[0, 3.5, 0]}
+          fontSize={0.15}
+          color="#94a3b8"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/inter-regular.woff"
+        >
+          Explore my iOS development journey
+        </Text>
+      </group>
+      
+      {/* Development Stations for Each Project */}
       {projects.map((project, index) => (
-        <group key={project.id} position={project.position}>
-          {/* Main Project Orb with Data Visualization */}
-          <mesh
-            onClick={() => {
-              debug.info('Project selected', project.id)
-              setSelectedProject(selectedProject === project.id ? null : project.id)
-              onProjectSelect(project.id)
-            }}
-            onPointerOver={() => {
-              setHovered(project.id)
-              debug.debug('Project hovered', project.id)
-            }}
-            onPointerOut={() => {
-              setHovered(null)
-              debug.debug('Project unhovered', project.id)
-            }}
-            castShadow
-          >
-            <sphereGeometry args={[0.5, 32, 32]} />
-            <meshStandardMaterial 
-              color={project.color}
-              emissive={project.color}
-              emissiveIntensity={hovered === project.id ? 0.6 : 0.2}
-              metalness={0.95}
-              roughness={0.05}
-            />
-          </mesh>
-          
-          {/* Data Rings - Rating Visualization */}
-          <mesh rotation={[Math.PI / 2, 0, 0]}>
-            <ringGeometry args={[0.55, 0.6, 64]} />
-            <meshBasicMaterial 
-              color={project.color} 
-              transparent 
-              opacity={hovered === project.id ? 0.9 : 0.4}
-            />
-          </mesh>
-          
-          {/* Download Count Ring */}
-          <mesh rotation={[Math.PI / 2, 0, Math.PI / 4]}>
-            <ringGeometry args={[0.65, 0.7, 64]} />
-            <meshBasicMaterial 
-              color="#10b981" 
-              transparent 
-              opacity={hovered === project.id ? 0.7 : 0.3}
-            />
-          </mesh>
-          
-          {/* Professional Project Dashboard */}
-          <Html position={[0, 1.5, 0]} center>
-            <div className={`bg-black/90 backdrop-blur-xl rounded-2xl p-6 border transition-all duration-500 ${
-              hovered === project.id 
-                ? 'scale-110 border-white/50 shadow-2xl' 
-                : 'scale-100 border-white/20'
-            }`}>
-              {/* Header */}
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-white font-bold text-xl">{project.title}</h3>
-                <div className="flex items-center gap-1">
-                  <span className="text-yellow-400">★</span>
-                  <span className="text-white font-semibold">{project.metrics.rating}</span>
-                </div>
-              </div>
-              
-              {/* Description */}
-              <p className="text-blue-200 text-sm mb-4 max-w-sm leading-relaxed">{project.description}</p>
-              
-              {/* Metrics Grid */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-blue-600/20 rounded-lg p-3 border border-blue-400/30">
-                  <div className="text-lg font-bold text-blue-300">{project.metrics.downloads}</div>
-                  <div className="text-blue-200 text-xs">Downloads</div>
-                </div>
-                <div className="bg-green-600/20 rounded-lg p-3 border border-green-400/30">
-                  <div className="text-lg font-bold text-green-300">{project.metrics.users}</div>
-                  <div className="text-green-200 text-xs">Active Users</div>
-                </div>
-                <div className="bg-purple-600/20 rounded-lg p-3 border border-purple-400/30">
-                  <div className="text-lg font-bold text-purple-300">{project.metrics.revenue}</div>
-                  <div className="text-purple-200 text-xs">Revenue</div>
-                </div>
-                <div className="bg-orange-600/20 rounded-lg p-3 border border-orange-400/30">
-                  <div className="text-lg font-bold text-orange-300">{project.metrics.size}</div>
-                  <div className="text-orange-200 text-xs">App Size</div>
-                </div>
-              </div>
-              
-              {/* Tech Stack */}
-              <div className="mb-4">
-                <h4 className="text-white font-semibold text-sm mb-2">Technologies</h4>
-                <div className="flex flex-wrap gap-1">
-                  {project.tech.map((tech, i) => (
-                    <span key={i} className="px-2 py-1 bg-white/10 text-white text-xs rounded-full border border-white/20">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              
-              {/* Achievements */}
-              {selectedProject === project.id && (
-                <div className="mb-4">
-                  <h4 className="text-white font-semibold text-sm mb-2">Key Achievements</h4>
-                  <div className="space-y-1">
-                    {project.achievements.map((achievement, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs text-green-300">
-                        <span className="text-green-400">✓</span>
-                        <span>{achievement}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {/* Action Button */}
-              <div className="text-center">
-                <button className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 text-sm font-medium">
-                  Explore Project →
-                </button>
-              </div>
-            </div>
-          </Html>
-          
-          {/* Enhanced Connection Lines with Data Flow */}
-          <line>
-            <bufferGeometry>
-              <bufferAttribute
-                attach="attributes-position"
-                count={2}
-                array={new Float32Array([0, 0, 0, 0, 0, 0])}
-                itemSize={3}
-              />
-            </bufferGeometry>
-            <lineBasicMaterial 
-              color={project.color} 
-              opacity={hovered === project.id ? 1 : 0.4} 
-              transparent 
-              linewidth={hovered === project.id ? 3 : 1}
-            />
-          </line>
-          
-          {/* Floating Achievement Badges */}
-          {project.achievements.slice(0, 2).map((achievement, i) => (
-            <FloatingAchievement 
-              key={achievement}
-              position={[
-                project.position[0] + Math.cos((i * Math.PI) + Math.PI / 4) * 1.2,
-                project.position[1] + 0.5 + Math.sin(i * Math.PI / 2) * 0.3,
-                project.position[2] + Math.sin((i * Math.PI) + Math.PI / 4) * 1.2
-              ] as [number, number, number]}
-              text={achievement}
-              color={project.color}
-            />
-          ))}
-        </group>
+        <DevStation
+          key={project.id}
+          position={project.position}
+          title={project.title}
+          tech={project.tech}
+          color={project.color}
+          onSelect={() => handleProjectSelect(project.id)}
+        />
       ))}
       
-      {/* Floating Tech Icons */}
-      <FloatingIcon position={[-1, 1, -1]} text="SwiftUI" color="#ff6b6b" />
-      <FloatingIcon position={[1, 1, -1]} text="ARKit" color="#4ecdc4" />
-      <FloatingIcon position={[-1, -1, -1]} text="Core Data" color="#45b7d1" />
-      <FloatingIcon position={[1, -1, -1]} text="CloudKit" color="#96ceb4" />
-      
-      {/* Ground Plane */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]} receiveShadow>
-        <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial 
-          color="#1e293b" 
-          transparent 
-          opacity={0.3}
-          roughness={0.8}
-        />
-      </mesh>
-      
-      {/* Debug Controls */}
-      {debugMode && (
-        <mesh 
-          onClick={() => {
-            setDebugMode(false)
-            debug.info('Debug mode disabled')
-          }}
+      {/* Achievement Gallery */}
+      <group position={[0, 0, -8]}>
+        <Text
           position={[0, 2, 0]}
+          fontSize={0.2}
+          color="#f59e0b"
+          anchorX="center"
+          anchorY="middle"
+          font="/fonts/inter-bold.woff"
         >
-          <boxGeometry args={[0.2, 0.2, 0.2]} />
-          <meshBasicMaterial color="red" />
-        </mesh>
-      )}
+          Achievements
+        </Text>
+        
+        {projects.flatMap((project, projectIndex) =>
+          project.achievements.map((achievement, achievementIndex) => (
+            <AchievementTrophy
+              key={`${project.id}-${achievementIndex}`}
+              position={[
+                (projectIndex - 1) * 3,
+                0.5,
+                achievementIndex * 0.8 - 1
+              ]}
+              achievement={achievement}
+              color={project.color}
+            />
+          ))
+        )}
+      </group>
       
-      {/* Debug Info Display */}
-      {debugMode && (
-        <Html position={[0, 3, 0]} center>
-          <div className="bg-black/80 text-white p-2 rounded text-xs">
-            <div>Debug Mode: ON</div>
-            <div>Projects: {projects.length}</div>
-            <div>Hovered: {hovered || 'None'}</div>
-            <div>FPS: {Math.round(1000 / (performance.now() % 1000))}</div>
-          </div>
-        </Html>
-      )}
-    </group>
-  )
-}
-
-function FloatingIcon({ position, text, color }: { position: [number, number, number], text: string, color: string }) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + position[0]) * 0.1
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.5
-    }
-  })
-
-  return (
-    <group position={position}>
-      <mesh ref={meshRef}>
-        <boxGeometry args={[0.2, 0.2, 0.2]} />
-        <meshStandardMaterial 
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.2}
-          metalness={0.7}
-          roughness={0.3}
-        />
-      </mesh>
+      {/* Floating Code Particles */}
+      <Sparkles count={100} scale={[10, 10, 10]} size={3} speed={0.5} color="#3b82f6" />
       
-      <Html position={[0, 0.4, 0]} center>
-        <div className="px-2 py-1 bg-black/50 text-white text-xs rounded">
-          {text}
-        </div>
-      </Html>
-    </group>
-  )
-}
-
-function FloatingTechIcon({ position, text, color }: { position: [number, number, number], text: string, color: string }) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + position[0]) * 0.05
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.3
-      meshRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.1
-    }
-  })
-
-  return (
-    <group position={position}>
-      <mesh ref={meshRef}>
-        <octahedronGeometry args={[0.1]} />
-        <meshStandardMaterial 
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.3}
-          metalness={0.8}
-          roughness={0.2}
-        />
-      </mesh>
-      
-      <Html position={[0, 0.3, 0]} center>
-        <div className="px-2 py-1 bg-black/70 backdrop-blur-sm text-white text-xs rounded-full border border-white/20">
-          {text}
-        </div>
-      </Html>
-    </group>
-  )
-}
-
-function FloatingAchievement({ position, text, color }: { position: [number, number, number], text: string, color: string }) {
-  const meshRef = useRef<THREE.Mesh>(null)
-  
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + position[0]) * 0.08
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.2
-      meshRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.3) * 0.1
-    }
-  })
-
-  return (
-    <group position={position}>
-      <mesh ref={meshRef}>
-        <boxGeometry args={[0.15, 0.15, 0.15]} />
-        <meshStandardMaterial 
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.4}
-          metalness={0.9}
-          roughness={0.1}
-        />
-      </mesh>
-      
-      <Html position={[0, 0.4, 0]} center>
-        <div className="px-3 py-2 bg-gradient-to-r from-green-600/90 to-emerald-600/90 backdrop-blur-sm text-white text-xs rounded-lg border border-green-400/30 shadow-lg">
-          <div className="flex items-center gap-1">
-            <span className="text-green-300">🏆</span>
-            <span className="font-medium">{text}</span>
-          </div>
-        </div>
-      </Html>
+      {/* Ambient Lighting */}
+      <ambientLight intensity={0.3} />
+      <directionalLight position={[5, 5, 5]} intensity={0.8} castShadow />
+      <pointLight position={[-5, 5, 5]} intensity={0.5} color="#3b82f6" />
+      <pointLight position={[5, -5, -5]} intensity={0.5} color="#8b5cf6" />
     </group>
   )
 }
